@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+import re
+from atof import atof
+import numpy as np
+import matplotlib.pyplot as plt
+
+def get_macro(source, name):
+    m = re.search(r'^#define\s+' + re.escape(name) + r'\s+(.*)$', source, re.M)
+    if not m:
+        return
+    m = m.groups()[0]
+    mm = re.match(r'\(\(number\)(.*)\)', m)
+    if mm:
+        m = mm.groups()[0]
+    try:
+        m = eval(m)
+    except Exception:
+        pass
+    return m
+
+with open('kz.c') as f:
+    source = f.read()
+for key in 'NR', 'NX', 'NT', 'X0', 'XN', 'DX', 'T0', 'TN', 'DT':
+    value = get_macro(source, key)
+    print('%-8s' % key, value)
+    globals()[key] = value
+
+with open('kz.out') as f:
+    data = np.array([list(map(atof, l.split())) for l in f])
+print(data)
+
+for r, u in enumerate(data):
+    t = T0 + DT * (r * NT) / NR
+    x = np.linspace(X0, XN, NX)
+    plt.title(f'Kruskal-Zalusky soliton at $t = {"%g" % t}$')
+    plt.xlabel('$x$')
+    plt.ylabel('$u$')
+    plt.plot(x, u)
+    plt.savefig(f'{__file__}-{r}.pdf')
+    plt.clf()
