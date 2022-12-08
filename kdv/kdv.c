@@ -39,10 +39,10 @@ int kdv(int nt, int nx, number u0[nx], number u1[nx],
     {
       u2[j] = u0[j]
         + (eps / 3) * (dt / dx)
-          * (u0[(j-1+nx) % nx] + u0[j] + u0[(j+1) % nx])
-          * (u0[(j-1+nx) % nx] - u0[(j+1) % nx])
+          * (u1[(j-1+nx) % nx] + u1[j] + u1[(j+1) % nx])
+          * (u1[(j-1+nx) % nx] - u1[(j+1) % nx])
         + (mu / 1) * (dt / (dx*dx*dx))
-          * (u0[(j-2+nx) % nx] - 2*u0[(j-1+nx) % nx] + 2*u0[(j+1) % nx] - u0[(j+2) % nx])
+          * (u1[(j-2+nx) % nx] - 2*u1[(j-1+nx) % nx] + 2*u1[(j+1) % nx] - u1[(j+2) % nx])
       ;
     }
     ut = u0;

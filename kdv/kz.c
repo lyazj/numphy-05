@@ -3,12 +3,12 @@
 #include <math.h>
 
 #define NX  256
-#define NT  32000000
+#define NT  20000000
 
 #define X0  ((number)0.0)
 #define XN  ((number)2.0)
 #define T0  ((number)0.0)
-#define TN  ((number)10.0)
+#define TN  ((number)8.0)
 
 #define EPS ((number)1.0)
 #define MU  ((number)(0.022 * 0.022))
@@ -16,7 +16,7 @@
 #define DX  ((XN - X0) / NX)
 #define DT  ((TN - T0) / NT)
 
-#define NR  40
+#define NR  32
 
 int main(void)
 {
