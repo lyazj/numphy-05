@@ -6,3 +6,5 @@ include ../Makefile.conf
 RUN += plot
 
 include ../Makefile.rule
+
+plot.run: diff.out

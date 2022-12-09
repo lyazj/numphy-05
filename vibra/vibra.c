@@ -6,7 +6,7 @@
 #define M     128
 #define N     128
 #define L       8
-#define LL     16
+#define LL    128
 
 #define X0    0.0
 #define XM    1.0
@@ -20,7 +20,7 @@ int main(void)
   number _u0[M + 1][N + 1], _u1[M + 1][N + 1], _u2[M + 1][N + 1];
   number (*u0)[N + 1] = _u0, (*u1)[N + 1] = _u1, (*u2)[N + 1] = _u2;
   number (*uu)[N + 1];
-  number x, y, t;
+  number x, y;
   int ll, l, m, n;
   number TX = pow(((TL - T0) / (L * LL)) / ((XM - X0) / M), 2);
   number TY = pow(((TL - T0) / (L * LL)) / ((YN - Y0) / N), 2);
@@ -41,6 +41,14 @@ int main(void)
   for(n = 0; n <= N; ++n)
     u2[M][n] = 0;
 
+  for(m = 0; m <= M; ++m)
+  {
+    for(n = 0; n <= N; ++n)
+      printf("%+26.17le", u0[m][n]);
+    printf("\n");
+  }
+  printf("\n");
+
   for(l = 1; l <= L; ++l)
   {
     for(ll = l == 1 ? 2 : 1; ll <= LL; ++ll)
@@ -59,5 +67,14 @@ int main(void)
       u1 = u2;
       u2 = uu;
     }
+    for(m = 0; m <= M; ++m)
+    {
+      for(n = 0; n <= N; ++n)
+        printf("%+26.17le", u1[m][n]);
+      printf("\n");
+    }
+    printf("\n");
   }
+
+  return 0;
 }

@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+names = ['M', 'N', 'L', 'X0', 'XM', 'Y0', 'YN', 'T0', 'TL']
+prefix = '#define '
+with open('vibra.c') as source:
+    for line in source:
+        if line[:len(prefix)] == prefix:
+            p, name, value = line.split()
+            if name in names:
+                globals()[name] = eval(value)
+
+data = np.empty((L + 1, M + 1, N + 1))
+with open('vibra.out') as out:
+    for l in range(L + 1):
+        for m in range(M + 1):
+            data[l,m] = out.readline().split()
+        out.readline()
+print(data)
+
+x = np.linspace(X0, XM, M + 1)
+y = np.linspace(Y0, YN, N + 1)
+xx = np.concatenate([x.reshape(M + 1, 1)] * (N + 1), axis=1)
+yy = np.concatenate([y.reshape(1, N + 1)] * (M + 1), axis=0)
+
+for l in range(L + 1):
+    t = T0 + (TL - T0) * l / L
+    u = np.cos(5**0.5 * np.pi * t) * np.sin(np.pi * xx) * np.sin(2 * np.pi * yy)
+
+    plt.clf()
+    ax = plt.axes(projection='3d')
+    ax.set(title='membranae vibration', xlabel='x', ylabel='y', zlabel='T')
+    ts = f'{t:.5f}'
+    name = f'vibra-{ts}.pdf'
+    print(name, file=__import__('sys').stderr)
+    ax.plot_surface(xx, yy, data[l])
+    ax.plot([], [], [], label=f't = {ts}')
+    plt.legend()
+    plt.savefig(name)
+
+    plt.clf()
+    ax = plt.axes(projection='3d')
+    ax.set(title='membranae vibration (reference)', xlabel='x', ylabel='y', zlabel='T')
+    ts = f'{t:.5f}'
+    name = f'vibra-{ts}-ref.pdf'
+    print(name, file=__import__('sys').stderr)
+    ax.plot_surface(xx, yy, u)
+    ax.plot([], [], [], label=f't = {ts}')
+    plt.legend()
+    plt.savefig(name)
+
+    plt.clf()
+    ax = plt.axes(projection='3d')
+    ax.set(title='membranae vibration (error)', xlabel='x', ylabel='y', zlabel='T')
+    ts = f'{t:.5f}'
+    name = f'vibra-{ts}-err.pdf'
+    print(name, file=__import__('sys').stderr)
+    ax.plot_surface(xx, yy, data[l] - u)
+    ax.plot([], [], [], label=f't = {ts}')
+    plt.legend()
+    plt.savefig(name)
