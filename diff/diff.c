@@ -4,18 +4,18 @@
 
 #define number double
 
-#define M      32
+#define M     128
 #define MM    128
 #define N     128
 #define L      10
-#define LL      4
+#define LL   1024
 
 #define X0    0.0
 #define XM    1.0
 #define Y0    0.0
 #define YN    1.0
 #define T0    0.0
-#define TL  0.001
+#define TL    1.0
 
 static int tdm_tri(int n, int m,
     number d[n], number l[n], number u[n], number r[n][m]);
