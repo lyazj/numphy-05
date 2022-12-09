@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+
+import re
+import numpy as np
+import matplotlib.pyplot as plt
+
+names = ['M', 'MM', 'N', 'L', 'X0', 'XM', 'Y0', 'YN', 'T0', 'TL']
+prefix = '#define '
+with open('diff.c') as source:
+    for line in source:
+        if line[:len(prefix)] == prefix:
+            p, name, value = line.split()
+            if name in names:
+                globals()[name] = eval(value)
+
+data = np.empty((MM + 1, L + 1, N + 1))
+header = re.compile(r'^mm = (\d+)  l = (\d+)$')
+with open('diff.out') as out:
+    mm, l, n = None, None, None
+    for line in out:
+        h = header.match(line)
+        if h:
+            if n is not None and n != N + 1:
+                raise RuntimeError(f'mm = {mm}  l = {l}  n = {n}')
+            mm, l = map(int, h.groups())
+            n = 0
+        elif mm is not None:
+            try:
+                value = float(line)
+            except ValueError:
+                continue
+            data[mm][l][n] = value
+            n += 1
+    if n is not None and n != N + 1:
+        raise RuntimeError(f'mm = {mm}  l = {l}  n = {n}')
+print(data)
+
+x = np.linspace(X0, XM, MM + 1)
+y = np.linspace(Y0, YN, N + 1)
+xx = np.concatenate([x.reshape(MM + 1, 1)] * (N + 1), axis=1)
+yy = np.concatenate([y.reshape(1, N + 1)] * (MM + 1), axis=0)
+
+for l in range(L + 1):
+    t = T0 + (TL - T0) * l / L
+    X = np.sum([
+        (
+            np.cos(0.4 * m * np.pi) - np.cos(0.6 * m * np.pi)
+        ) / (m * np.pi) * np.sin(m * np.pi * x) * np.exp(-m**2 * np.pi**2 * t)
+        for m in range(1, 65536)
+    ], axis=0)
+    Y = 1 / 10 + np.sum([
+        (
+            np.sin(0.6 * n * np.pi) - np.sin(0.4 * n * np.pi)
+        ) / (n * np.pi) * np.cos(n * np.pi * y) * np.exp(-n**2 * np.pi**2 * t)
+        for n in range(1, 65536)
+    ], axis=0)
+    Tt = 4 * X.reshape(MM + 1, 1) @ Y.reshape(1, N + 1)
+
+    plt.clf()
+    ax = plt.axes(projection='3d')
+    ax.set(title='diffussion result', xlabel='x', ylabel='y', zlabel='T')
+    ts = f'{t:.5f}'
+    name = f'diff-{ts}.pdf'
+    print(name, file=__import__('sys').stderr)
+    ax.plot_surface(xx, yy, data[:,l,:])
+    ax.plot([], [], [], label=f't = {ts}')
+    plt.legend()
+    plt.savefig(name)
+
+    plt.clf()
+    ax = plt.axes(projection='3d')
+    ax.set(title='diffussion result (reference)', xlabel='x', ylabel='y', zlabel='T')
+    ts = f'{t:.5f}'
+    name = f'diff-{ts}-ref.pdf'
+    print(name, file=__import__('sys').stderr)
+    ax.plot_surface(xx, yy, Tt)
+    ax.plot([], [], [], label=f't = {ts}')
+    plt.legend()
+    plt.savefig(name)
+
+    plt.clf()
+    ax = plt.axes(projection='3d')
+    ax.set(title='diffussion result (error)', xlabel='x', ylabel='y', zlabel='T')
+    ts = f'{t:.5f}'
+    name = f'diff-{ts}-err.pdf'
+    print(name, file=__import__('sys').stderr)
+    ax.plot_surface(xx, yy, data[:,l,:] - Tt)
+    ax.plot([], [], [], label=f't = {ts}')
+    plt.legend()
+    plt.savefig(name)

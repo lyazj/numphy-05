@@ -4,5 +4,5 @@
 !*.h
 !*.c
 !*.py
-!*-plot
+!*plot
 !param.txt
