@@ -1,0 +1,55 @@
+[1]
+#define M      32
+#define MM    128
+#define N     128
+#define L      10
+#define LL   1024
+
+#define X0    0.0
+#define XM    1.0
+#define Y0    0.0
+#define YN    1.0
+#define T0    0.0
+#define TL    1.0
+
+[2]
+#define M      32
+#define MM    128
+#define N     128
+#define L      10
+#define LL    128
+
+#define X0    0.0
+#define XM    1.0
+#define Y0    0.0
+#define YN    1.0
+#define T0    0.0
+#define TL    0.1
+
+[3]
+#define M      32
+#define MM    128
+#define N     128
+#define L      10
+#define LL     16
+
+#define X0    0.0
+#define XM    1.0
+#define Y0    0.0
+#define YN    1.0
+#define T0    0.0
+#define TL   0.01
+
+[4]
+#define M      32
+#define MM    128
+#define N     128
+#define L      10
+#define LL      4
+
+#define X0    0.0
+#define XM    1.0
+#define Y0    0.0
+#define YN    1.0
+#define T0    0.0
+#define TL  0.001
