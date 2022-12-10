@@ -4,7 +4,7 @@ include ../Makefile.conf
 
 # CFLAGS := $(subst -O3,-Og,$(CFLAGS))
 RUN += plot anim
-OUT += vibra*.pdf vibra*.jpg vibra*.gif
+OUT += vibra*.pdf vibra*.jpg
 
 include ../Makefile.rule
 

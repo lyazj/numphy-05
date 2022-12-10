@@ -59,6 +59,21 @@
 #define LAMBDA  1.0
 
 [5]
+#define M       256
+#define N       256
+#define L         8
+#define LL       32
+
+#define X0      0.0
+#define XM      1.0
+#define Y0      0.0
+#define YN      1.0
+#define T0      0.0
+#define TL      1.0
+
+#define LAMBDA  1.0
+
+[6]
 #define M       128
 #define N       128
 #define L         8
