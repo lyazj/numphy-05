@@ -2,13 +2,14 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import norm
+from scipy.stats import norm, chi2
 
 with open('rand.out') as out:
-    data = np.array([l for l in out], dtype='float64')
-data /= len(data)
-mean, std = np.mean(data), np.std(data)
-n, bins, patches = plt.hist(data, 100, density=True, label='observed')
+    data = np.array([l.split() for l in out], dtype='float64')
+
+freq = data[:,3] / data.shape[0]
+mean, std = np.mean(freq), np.std(freq)
+n, bins, patches = plt.hist(freq, 100, density=True, label='observed')
 pdf = norm.pdf(bins, mean, std)
 plt.title('hist. and fitted PDF of frequency over $[0.3, 0.4)$')
 plt.xlabel('frequency')
@@ -16,4 +17,15 @@ plt.ylabel('probability density')
 plt.plot(bins, pdf, label=f'fitted for $\mu = {mean:.4f},\ \sigma = {std:.4f}$')
 plt.legend()
 plt.savefig('rand.pdf')
+plt.show()
+
+c2 = ((data - 1000)**2).sum(axis=1) / 1000
+n, bins, patches = plt.hist(c2, 100, density=True, label='observed')
+pdf = chi2.pdf(bins, 9)
+plt.title('$\chi^2$ value distribution')
+plt.xlabel('$\chi^2 value$')
+plt.ylabel('probability density')
+plt.plot(bins, pdf, label='fitted for $\mathrm{df} = 9$')
+plt.legend()
+plt.savefig('chi2.pdf')
 plt.show()
