@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+
+with open('rand.out') as out:
+    data = np.array([l for l in out], dtype='float64')
+data /= len(data)
+mean, std = np.mean(data), np.std(data)
+n, bins, patches = plt.hist(data, 100, density=True, label='observed')
+pdf = norm.pdf(bins, mean, std)
+plt.title('hist. and fitted PDF of frequency over $[0.3, 0.4)$')
+plt.xlabel('frequency')
+plt.ylabel('probability density')
+plt.plot(bins, pdf, label=f'fitted for $\mu = {mean:.4f},\ \sigma = {std:.4f}$')
+plt.legend()
+plt.savefig('rand.pdf')
+plt.show()
