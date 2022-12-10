@@ -3,17 +3,19 @@
 
 #define number double
 
-#define M     128
-#define N     128
-#define L      32
-#define LL     32
+#define M       128
+#define N       128
+#define L        32
+#define LL       32
 
-#define X0    0.0
-#define XM    1.0
-#define Y0    0.0
-#define YN    1.0
-#define T0    0.0
-#define TL    1.0
+#define X0      0.0
+#define XM      1.0
+#define Y0      0.0
+#define YN      1.0
+#define T0      0.0
+#define TL      1.0
+
+#define LAMBDA  1.0
 
 int main(void)
 {
@@ -22,8 +24,8 @@ int main(void)
   number (*uu)[N + 1];
   number x, y;
   int ll, l, m, n;
-  number TX = pow(((TL - T0) / (L * LL)) / ((XM - X0) / M), 2);
-  number TY = pow(((TL - T0) / (L * LL)) / ((YN - Y0) / N), 2);
+  number TX = LAMBDA * pow(((TL - T0) / (L * LL)) / ((XM - X0) / M), 2);
+  number TY = LAMBDA * pow(((TL - T0) / (L * LL)) / ((YN - Y0) / N), 2);
 
   for(m = 0; m <= M; ++m)
   {

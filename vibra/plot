@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-names = ['M', 'N', 'L', 'LL', 'X0', 'XM', 'Y0', 'YN', 'T0', 'TL']
+names = ['M', 'N', 'L', 'LL', 'X0', 'XM', 'Y0', 'YN', 'T0', 'TL', 'LAMBDA']
 prefix = '#define '
 with open('vibra.c') as source:
     for line in source:
@@ -11,7 +11,7 @@ with open('vibra.c') as source:
             p, name, value = line.split()
             if name in names:
                 globals()[name] = eval(value)
-TS = ((TL - T0) / (L * LL)) * np.hypot(M / (XM - X0), N / (YN - Y0))
+TS = LAMBDA**0.5 * ((TL - T0) / (L * LL)) * np.hypot(M / (XM - X0), N / (YN - Y0))
 print(f'TS = {TS}')
 
 data = np.empty((L + 1, M + 1, N + 1))
@@ -33,7 +33,9 @@ for l in range(L + 1):
 
     plt.clf()
     ax = plt.axes(projection='3d')
-    ax.set(title='membranae vibration', xlabel='x', ylabel='y', zlabel='u', zlim=(-1, 1))
+    ax.set(title='membranae vibration', xlabel='x', ylabel='y', zlabel='u')
+    if TS <= 1:
+        ax.set(zlim=(-1, 1))
     ts = f'{t:.5f}'
     TSs = f'{TS:.5f}'
     name = f'vibra-{TSs}-{ts}.pdf'
@@ -45,7 +47,9 @@ for l in range(L + 1):
 
     plt.clf()
     ax = plt.axes(projection='3d')
-    ax.set(title='membranae vibration (reference)', xlabel='x', ylabel='y', zlabel='u', zlim=(-1, 1))
+    ax.set(title='membranae vibration (reference)', xlabel='x', ylabel='y', zlabel='u')
+    if TS <= 1:
+        ax.set(zlim=(-1, 1))
     ts = f'{t:.5f}'
     TSs = f'{TS:.5f}'
     name = f'vibra-{TSs}-{ts}-ref.pdf'
@@ -57,7 +61,7 @@ for l in range(L + 1):
 
     plt.clf()
     ax = plt.axes(projection='3d')
-    ax.set(title='membranae vibration (error)', xlabel='x', ylabel='y', zlabel='u', zlim=(-1, 1))
+    ax.set(title='membranae vibration (error)', xlabel='x', ylabel='y', zlabel='u')
     ts = f'{t:.5f}'
     TSs = f'{TS:.5f}'
     name = f'vibra-{TSs}-{ts}-err.pdf'
