@@ -5,8 +5,8 @@
 
 #define M     128
 #define N     128
-#define L       8
-#define LL    128
+#define L      32
+#define LL     32
 
 #define X0    0.0
 #define XM    1.0

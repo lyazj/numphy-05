@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+import os
+import imageio
+
+jpgs = sorted(f for f in os.listdir() if f[-4:] == '.jpg')
+imageio.mimsave('vibra.gif', [imageio.imread(f) for f in jpgs], 'GIF')

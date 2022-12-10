@@ -4,6 +4,7 @@ include ../Makefile.conf
 
 # CFLAGS := $(subst -O3,-Og,$(CFLAGS))
 RUN += plot
+OUT += diff*.pdf
 
 include ../Makefile.rule
 
