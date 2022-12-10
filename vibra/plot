@@ -29,7 +29,7 @@ yy = np.concatenate([y.reshape(1, N + 1)] * (M + 1), axis=0)
 
 for l in range(L + 1):
     t = T0 + (TL - T0) * l / L
-    u = np.cos(5**0.5 * np.pi * t) * np.sin(np.pi * xx) * np.sin(2 * np.pi * yy)
+    u = np.cos((5 * LAMBDA)**0.5 * np.pi * t) * np.sin(np.pi * xx) * np.sin(2 * np.pi * yy)
 
     plt.clf()
     ax = plt.axes(projection='3d')
